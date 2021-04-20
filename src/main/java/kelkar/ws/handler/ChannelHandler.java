@@ -4,6 +4,7 @@ import kelkar.ws.model.HttpRequest;
 import kelkar.ws.model.HttpResponse;
 import kelkar.ws.model.HttpStatus;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
@@ -42,10 +43,33 @@ public class ChannelHandler {
         HttpRequest httpRequest = (HttpRequest) selectionKey.attachment();
 
         String testResponse = "Hello World! " + httpRequest.toString();
+
         HashMap<String, String> responseHeadersMap = new HashMap<>();
         responseHeadersMap.put("Content-Type", "text/html");
+        responseHeadersMap.put("Date", java.time.LocalDateTime.now().toString());
 
-        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, responseHeadersMap, testResponse);
+        HttpResponse httpResponse;
+
+        StaticFileHandler staticFileHandler = new StaticFileHandler();
+        String path = "";
+        try {
+            if (httpRequest.getUri() != null && httpRequest.getUri().equals("/")) {
+                path = "index.html";
+            } else if (httpRequest.getUri() != null) {
+                path = httpRequest.getUri();
+            } else {
+                path = "index.html";
+            }
+
+            String content = staticFileHandler.getFileContent(path);
+            httpResponse = new HttpResponse(HttpStatus.OK, responseHeadersMap, content);
+            System.out.println(String.format("Serving file %s in response to request %s", path, httpRequest.toString()));
+        } catch (FileNotFoundException fileNotFoundException) {
+            System.out.println(String.format("File not found %s in response to request %s", path, httpRequest.toString()));
+            httpResponse = new HttpResponse(HttpStatus.NOT_FOUND, responseHeadersMap, testResponse);
+        } catch (Exception e) {
+            httpResponse = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, responseHeadersMap, testResponse);
+        }
 
         socketChannel.write(ByteBuffer.wrap(httpResponse.build().getBytes())); // can be non-blocking
         socketChannel.close();
