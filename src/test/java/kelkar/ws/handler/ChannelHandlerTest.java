@@ -49,9 +49,6 @@ public class ChannelHandlerTest {
         mockito.when(selectionKey.channel()).thenReturn(serverSocketChannel);
         mockito.when(serverSocketChannel.accept()).thenReturn(socketChannel);
 
-
-        // verify(socketChannel).register(selector, SelectionKey.OP_READ);
-
         ChannelHandler.handleChannelAccept(selector, selectionKey);
 
         verify(socketChannel, times(1)).configureBlocking(false);
