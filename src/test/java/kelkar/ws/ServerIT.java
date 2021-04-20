@@ -1,6 +1,7 @@
 package kelkar.ws;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -12,14 +13,14 @@ import java.net.http.HttpResponse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ServerIT extends Server {
-
-    @BeforeAll
+    
     public void setup() {
         String[] args = {};
-        //main(args);
+        main(args);
     }
 
     @Test
+    @Disabled
     public void testServerStarts() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()

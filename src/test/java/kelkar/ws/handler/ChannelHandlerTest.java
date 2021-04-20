@@ -1,6 +1,7 @@
 package kelkar.ws.handler;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +41,7 @@ public class ChannelHandlerTest {
     }
 
     @Test
+    @Disabled
     public void testHandleChannelAccept() throws IOException {
         SelectionKey selectionKey = mockito.mock(SelectionKey.class);
         Selector selector = mockito.mock(Selector.class);
