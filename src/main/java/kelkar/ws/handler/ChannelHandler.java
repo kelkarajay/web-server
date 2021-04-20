@@ -66,9 +66,9 @@ public class ChannelHandler {
             System.out.println(String.format("Serving file %s in response to request %s", path, httpRequest.toString()));
         } catch (FileNotFoundException fileNotFoundException) {
             System.out.println(String.format("File not found %s in response to request %s", path, httpRequest.toString()));
-            httpResponse = new HttpResponse(HttpStatus.NOT_FOUND, responseHeadersMap, testResponse);
+            httpResponse = new HttpResponse(HttpStatus.NOT_FOUND, responseHeadersMap, "NOT FOUND");
         } catch (Exception e) {
-            httpResponse = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, responseHeadersMap, testResponse);
+            httpResponse = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, responseHeadersMap, "INTERNAL SERVER ERROR");
         }
 
         socketChannel.write(ByteBuffer.wrap(httpResponse.build().getBytes())); // can be non-blocking

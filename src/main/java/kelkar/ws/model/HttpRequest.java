@@ -47,10 +47,7 @@ public class HttpRequest {
             tokens = line.split(": ");
             requestHeadersMap.put(tokens[0], tokens[1]);
         }
-        System.out.println(method);
-        System.out.println(uri);
-        System.out.println(httpVersion);
-        System.out.println(requestHeadersMap.toString());
+        System.out.println(String.format("%s %s %s", this.method, this.uri, this.httpVersion));
     }
 
     /***
