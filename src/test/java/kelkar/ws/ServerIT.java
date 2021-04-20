@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ServerIT extends Server {
-    
+
     public void setup() {
         String[] args = {};
         main(args);
