@@ -30,6 +30,7 @@ public class ServerIT extends Server {
         HttpResponse<Void> response = client.send(request,
                 HttpResponse.BodyHandlers.discarding());
 
+        System.out.println(response.toString());
         System.out.println(response.statusCode());
     }
 }

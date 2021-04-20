@@ -1,6 +1,8 @@
 package kelkar.ws.handler;
 
 import kelkar.ws.model.HttpRequest;
+import kelkar.ws.model.HttpResponse;
+import kelkar.ws.model.HttpStatus;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,6 +10,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.HashMap;
 
 public class ChannelHandler {
     public static void handleChannelAccept(Selector selector, SelectionKey selectionKey) throws IOException {
@@ -39,8 +42,12 @@ public class ChannelHandler {
         HttpRequest httpRequest = (HttpRequest) selectionKey.attachment();
 
         String testResponse = "Hello World! " + httpRequest.toString();
+        HashMap<String, String> responseHeadersMap = new HashMap<>();
+        responseHeadersMap.put("Content-Type", "text/html");
 
-        socketChannel.write(ByteBuffer.wrap(testResponse.getBytes())); // can be non-blocking
+        HttpResponse httpResponse = new HttpResponse(HttpStatus.OK, responseHeadersMap, testResponse);
+
+        socketChannel.write(ByteBuffer.wrap(httpResponse.build().getBytes())); // can be non-blocking
         socketChannel.close();
     }
 }
