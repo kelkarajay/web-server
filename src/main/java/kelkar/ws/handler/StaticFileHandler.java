@@ -1,16 +1,13 @@
 package kelkar.ws.handler;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class StaticFileHandler {
-    private final String CONTENT_ROOT = File.separator + "static";
+    private final String CONTENT_ROOT = System.getenv("CONTENT_ROOT_PATH") != null ?
+            System.getenv("CONTENT_ROOT_PATH") : "/usr/app/static";
 
     public String getFileContent(String path) throws IOException {
         String filePath = CONTENT_ROOT + File.separator + path;

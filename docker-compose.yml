@@ -5,6 +5,6 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /tmp/static:/static
+      - /tmp/static:/usr/app/static
     environment:
       SERVER_PORT: 8080

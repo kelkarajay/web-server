@@ -63,9 +63,9 @@ public class ChannelHandler {
 
             String content = staticFileHandler.getFileContent(path);
             httpResponse = new HttpResponse(HttpStatus.OK, responseHeadersMap, content);
-            System.out.println(String.format("Serving file %s in response to request %s", path, httpRequest.toString()));
+            System.out.println(String.format("Serving file %s in response to request %s", path, httpRequest.getUri()));
         } catch (FileNotFoundException fileNotFoundException) {
-            System.out.println(String.format("File not found %s in response to request %s", path, httpRequest.toString()));
+            System.out.println(String.format("File not found %s in response to request %s", path, httpRequest.getUri()));
             httpResponse = new HttpResponse(HttpStatus.NOT_FOUND, responseHeadersMap, "NOT FOUND");
         } catch (Exception e) {
             httpResponse = new HttpResponse(HttpStatus.INTERNAL_SERVER_ERROR, responseHeadersMap, "INTERNAL SERVER ERROR");
