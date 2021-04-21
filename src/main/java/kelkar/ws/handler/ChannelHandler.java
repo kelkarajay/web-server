@@ -14,7 +14,13 @@ import java.nio.channels.SocketChannel;
 import java.util.HashMap;
 
 public class ChannelHandler {
-    public static void handleChannelAccept(Selector selector, SelectionKey selectionKey) throws IOException {
+    private final StaticFileHandler staticFileHandler;
+
+    public ChannelHandler(StaticFileHandler staticFileHandler) {
+        this.staticFileHandler = staticFileHandler;
+    }
+
+    public void handleChannelAccept(Selector selector, SelectionKey selectionKey) throws IOException {
         ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
 
         SocketChannel socketChannel = serverSocketChannel.accept(); // can be non-blocking
@@ -24,7 +30,7 @@ public class ChannelHandler {
         }
     }
 
-    public static void handleChannelRead(Selector selector, SelectionKey selectionKey) throws IOException {
+    public void handleChannelRead(Selector selector, SelectionKey selectionKey) throws IOException {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
 
         ByteBuffer buffer = ByteBuffer.allocate(1024);
@@ -38,7 +44,7 @@ public class ChannelHandler {
         socketChannel.register(selector, SelectionKey.OP_WRITE, httpRequest);
     }
 
-    public static void handleChannelWrite(SelectionKey selectionKey) throws IOException {
+    public void handleChannelWrite(SelectionKey selectionKey) throws IOException {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
         HttpRequest httpRequest = (HttpRequest) selectionKey.attachment();
 
@@ -50,7 +56,6 @@ public class ChannelHandler {
 
         HttpResponse httpResponse;
 
-        StaticFileHandler staticFileHandler = new StaticFileHandler();
         String path = "";
         try {
             if (httpRequest.getUri() != null && httpRequest.getUri().equals("/")) {

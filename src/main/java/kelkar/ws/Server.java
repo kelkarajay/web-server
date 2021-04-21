@@ -1,6 +1,7 @@
 package kelkar.ws;
 
 import kelkar.ws.handler.ChannelHandler;
+import kelkar.ws.handler.StaticFileHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -26,6 +27,13 @@ public class Server {
         }
 
         try {
+            String CONTENT_ROOT_PATH = System.getenv("CONTENT_ROOT_PATH") != null ?
+                    System.getenv("CONTENT_ROOT_PATH") : "/usr/app/static";
+
+            StaticFileHandler staticFileHandler = new StaticFileHandler(CONTENT_ROOT_PATH);
+
+            ChannelHandler channelHandler = new ChannelHandler(staticFileHandler);
+
             selector = Selector.open();
 
             ServerSocketChannel socketChannel = ServerSocketChannel.open();
@@ -49,13 +57,13 @@ public class Server {
 
                     if(key.isAcceptable()) {
                         System.out.println("Connection acceptable.");
-                        ChannelHandler.handleChannelAccept(selector, key);
+                        channelHandler.handleChannelAccept(selector, key);
                     } else if (key.isReadable()) {
                         System.out.println("Connection Readable.");
-                        ChannelHandler.handleChannelRead(selector, key);
+                        channelHandler.handleChannelRead(selector, key);
                     } else if (key.isWritable()) {
                         System.out.println("Connection Writable.");
-                        ChannelHandler.handleChannelWrite(key);
+                        channelHandler.handleChannelWrite(key);
                     }
 
                     selectionKeyIterator.remove();

@@ -29,6 +29,9 @@ public class ChannelHandlerTest {
 
     @Test
     public void testHandleChannelAcceptNoPendingConnections() throws IOException {
+        StaticFileHandler staticFileHandler = mockito.mock(StaticFileHandler.class);
+        ChannelHandler channelHandler = new ChannelHandler(staticFileHandler);
+
         SelectionKey selectionKey = mockito.mock(SelectionKey.class);
         Selector selector = mockito.mock(Selector.class);
         ServerSocketChannel serverSocketChannel = mockito.mock(ServerSocketChannel.class);
@@ -37,12 +40,15 @@ public class ChannelHandlerTest {
         mockito.when(selectionKey.channel()).thenReturn(serverSocketChannel);
         mockito.when(serverSocketChannel.accept()).thenReturn(null);
 
-        ChannelHandler.handleChannelAccept(selector, selectionKey);
+        channelHandler.handleChannelAccept(selector, selectionKey);
     }
 
     @Test
     @Disabled
     public void testHandleChannelAccept() throws IOException {
+        StaticFileHandler staticFileHandler = mockito.mock(StaticFileHandler.class);
+        ChannelHandler channelHandler = new ChannelHandler(staticFileHandler);
+
         SelectionKey selectionKey = mockito.mock(SelectionKey.class);
         Selector selector = mockito.mock(Selector.class);
         ServerSocketChannel serverSocketChannel = mockito.mock(ServerSocketChannel.class);
@@ -51,7 +57,7 @@ public class ChannelHandlerTest {
         mockito.when(selectionKey.channel()).thenReturn(serverSocketChannel);
         mockito.when(serverSocketChannel.accept()).thenReturn(socketChannel);
 
-        ChannelHandler.handleChannelAccept(selector, selectionKey);
+        channelHandler.handleChannelAccept(selector, selectionKey);
 
         verify(socketChannel, times(1)).configureBlocking(false);
     }
